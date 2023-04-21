@@ -6,6 +6,7 @@ from pathlib import Path
 
 WORD_APP_ID = "Word.Application"
 FILEFORMAT_PDF = 17 # Magic number from ChatGPT, tested it and it works
+HIDE_WORD = 3 # Supresses word opening
 
 def cmp_name(old, new):
     file_name = Path(old).stem+"_"+Path(new).stem+".docx"
@@ -15,12 +16,12 @@ def generate_compare(dir, original_file, modified_file, output_file):
   app = client.gencache.EnsureDispatch(WORD_APP_ID)
   app.Visible = 0
   app.CompareDocuments(app.Documents.Open(dir + original_file), app.Documents.Open(dir + modified_file))
-  app.ActiveDocument.ActiveWindow.View.Type = 3 # prevent that word opens itself
+  app.ActiveDocument.ActiveWindow.View.Type = HIDE_WORD
   if output_file.endswith(".pdf"):
     app.ActiveDocument.SaveAs(FileName = path.join(dir, output_file), FileFormat=FILEFORMAT_PDF) 
   else:
     app.ActiveDocument.SaveAs(FileName = path.join(dir, output_file))
-  app.ActiveDocument.Close(SaveChanges=0) # Supresses annoying loos of work prompt
+  app.ActiveDocument.Close(SaveChanges=0) # Supresses annoying unsaved changes prompt
   app.Quit()
 
 def cmp(original_file, modified_file, output_file):
