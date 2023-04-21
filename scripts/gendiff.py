@@ -8,10 +8,6 @@ WORD_APP_ID = "Word.Application"
 FILEFORMAT_PDF = 17 # Magic number from ChatGPT, tested it and it works
 HIDE_WORD = 3 # Supresses word opening
 
-def cmp_name(old, new):
-    file_name = Path(old).stem+"_"+Path(new).stem+".docx"
-    return file_name
-
 def generate_compare(dir, original_file, modified_file, output_file):
   app = client.gencache.EnsureDispatch(WORD_APP_ID)
   app.Visible = 0
